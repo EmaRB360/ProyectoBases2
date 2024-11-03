@@ -1,0 +1,216 @@
+<div class="separator">
+  <div class="container mt-4">
+    <div class="text-center">
+      <div class="header">
+        <h1>Panel del Instructor</h1>
+        <p>Gestiona tus cursos y rutinas.</p>
+      </div>
+
+      <!-- Menu -->
+      <div class="btn-group mb-4" role="group">
+        <button type="button" class="btn btn-outline-primary" (click)="selectedOption = 'cursosAsignados'">
+          <i class="fas fa-book"></i> Cursos Asignados
+        </button>
+        <button type="button" class="btn btn-outline-primary" (click)="selectedOption = 'historialCursos'">
+          <i class="fas fa-history"></i> Historial de Cursos
+        </button>
+        <button type="button" class="btn btn-outline-primary" (click)="selectedOption = 'rutinasAsignadas'">
+          <i class="fas fa-dumbbell"></i> Rutinas Asignadas
+        </button>
+      </div>
+    </div>
+
+    <!-- Cursos Asignados Section -->
+    <section *ngIf="selectedOption === 'cursosAsignados'" class="section-container">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h2>Cursos Asignados</h2>
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#crearCursoModal">Crear Curso</button>
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+            <li *ngFor="let curso of cursos" class="list-group-item">
+              <strong>ID:</strong> {{ curso.id_curso }} <br>
+              <strong>Nombre:</strong> {{ curso.nombre }} <br>
+              <strong>Descripción:</strong> {{ curso.descripcion }} <br>
+              <strong>Horario:</strong> {{ curso.horario | date:'short' }} <br>
+              <strong>Disponibilidad:</strong> {{ curso.disponibilidad }}
+              <div class="mt-2">
+                <button class="btn btn-secondary btn-sm" (click)="editarCurso(curso)">Editar</button>
+                <button class="btn btn-danger btn-sm" (click)="eliminarCurso(curso.id_curso)">Eliminar</button>
+              </div>
+
+              <!-- Lista de Clientes Inscritos -->
+              <h4 class="mt-3">Clientes Inscritos:</h4>
+              <ul>
+                <li *ngFor="let cliente of clientesPorCurso[curso.id_curso]">
+                  {{ getClienteNombre(cliente.id_usuario) }}
+                  <div class="mt-2">
+                    <button class="btn btn-secondary btn-sm" (click)="editarCliente(cliente)">Editar</button>
+                    <button class="btn btn-danger btn-sm" (click)="eliminarCliente(cliente.id_usuario)">Eliminar</button>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Historial de Cursos Section -->
+    <section *ngIf="selectedOption === 'historialCursos'" class="section-container">
+      <div class="card">
+        <div class="card-header">
+          <h2>Historial de Cursos</h2>
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+            <li *ngFor="let historial of historialCursos" class="list-group-item">
+              <strong>Nombre del Curso:</strong> {{ historial.nombre }} <br>
+              <strong>Cliente:</strong> {{ getClienteNombre(historial.cliente) }} <br>
+              <strong>Fecha:</strong> {{ historial.fecha | date:'short' }} <br>
+              <strong>Hora:</strong> {{ historial.hora }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rutinas Asignadas Section -->
+    <section *ngIf="selectedOption === 'rutinasAsignadas'" class="section-container">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h2>Rutinas Asignadas</h2>
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#crearRutinaModal">Crear Rutina</button>
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+            <li *ngFor="let rutina of rutinas" class="list-group-item">
+              <strong>Tipo de Rutina:</strong> {{ rutina.tipo_rutina }} <br>
+              <strong>Cliente:</strong> {{ getClienteNombre(rutina.cliente) }} <br>
+              <strong>Instructor:</strong> {{ getInstructorNombre(rutina.instructor) }} <br>
+              <strong>Máquina:</strong> {{ getMaquinaNombre(rutina.maquina) }} <br>
+              <strong>Fecha:</strong> {{ rutina.fecha | date:'short' }} <br>
+              <strong>Duración (horas):</strong> {{ rutina.horas }} <br>
+              <div class="mt-2">
+                <button class="btn btn-secondary btn-sm" (click)="editarRutina(rutina)">Editar</button>
+                <button class="btn btn-danger btn-sm" (click)="eliminarRutina(rutina.id_rutina)">Eliminar</button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="logout-container">
+      <button class="logout-button" (click)="logout()">Logout</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para Crear Rutina -->
+<div class="modal fade" id="crearRutinaModal" tabindex="-1" aria-labelledby="crearRutinaModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="crearRutinaModalLabel">Crear Rutina</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="crearRutina()">
+          <div class="mb-3">
+            <label for="tipoRutina" class="form-label">Tipo de Rutina</label>
+            <input type="text" id="tipoRutina" [(ngModel)]="nuevaRutina.tipo_rutina" name="tipoRutina" required class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="clienteRutina" class="form-label">Cliente ID</label>
+            <input type="number" id="clienteRutina" [(ngModel)]="nuevaRutina.cliente" name="cliente" required class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="instructorRutina" class="form-label">Instructor ID</label>
+            <input type="number" id="instructorRutina" [(ngModel)]="nuevaRutina.instructor" name="instructor" required class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="maquinaRutina" class="form-label">Máquina ID</label>
+            <input type="number" id="maquinaRutina" [(ngModel)]="nuevaRutina.maquina" name="maquina" required class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="duracionRutina" class="form-label">Duración (en horas)</label>
+            <input type="number" id="duracionRutina" [(ngModel)]="nuevaRutina.horas" name="duracion" required class="form-control">
+          </div>
+          <button type="submit" class="btn btn-primary">Crear Rutina</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para Crear Curso -->
+<div class="modal fade" id="crearCursoModal" tabindex="-1" aria-labelledby="crearCursoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="crearCursoModalLabel">Crear Curso</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="crearCurso()">
+          <div class="mb-3">
+            <label for="nombreCurso" class="form-label">Nombre del Curso</label>
+            <input type="text" id="nombreCurso" [(ngModel)]="nuevoCurso.nombre" name="nombre" required class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="descripcionCurso" class="form-label">Descripción</label>
+            <textarea id="descripcionCurso" [(ngModel)]="nuevoCurso.descripcion" name="descripcion" required class="form-control"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="horarioCurso" class="form-label">Horario</label>
+            <input type="datetime-local" id="horarioCurso" [(ngModel)]="nuevoCurso.horario" name="horario" required class="form-control">
+          </div>
+          <button type="submit" class="btn btn-primary">Crear Curso</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para Agregar Cliente -->
+<div class="modal fade" id="agregarClienteModal" tabindex="-1" aria-labelledby="agregarClienteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="agregarClienteModalLabel">Agregar Cliente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="agregarCliente()">
+          <div class="mb-3">
+            <label for="nombreCliente" class="form-label">Nombre</label>
+            <input type="text" id="nombreCliente" [(ngModel)]="nuevoCliente.nombre" name="nombre" required class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="apellido1Cliente" class="form-label">Apellido 1</label>
+            <input type="text" id="apellido1Cliente" [(ngModel)]="nuevoCliente.apellido1" name="apellido1" required class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="apellido2Cliente" class="form-label">Apellido 2</label>
+            <input type="text" id="apellido2Cliente" [(ngModel)]="nuevoCliente.apellido2" name="apellido2" required class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="cedulaCliente" class="form-label">Cédula</label>
+            <input type="text" id="cedulaCliente" [(ngModel)]="nuevoCliente.cedula" name="cedula" required class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="emailCliente" class="form-label">Email</label>
+            <input type="email" id="emailCliente" [(ngModel)]="nuevoCliente.e_mail" name="email" required class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="telefonoCliente" class="form-label">Teléfono</label>
+            <input type="text" id="telefonoCliente" [(ngModel)]="nuevoCliente.tel_cel" name="telefono" required class="form-control">
+          </div>
+          <button type="submit" class="btn btn-primary">Agregar Cliente</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

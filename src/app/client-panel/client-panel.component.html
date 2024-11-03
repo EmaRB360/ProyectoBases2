@@ -1,0 +1,57 @@
+<div class="separator">
+  <div class="container">
+    <div class="header">
+      <h1>Panel de Cliente</h1>
+      <p>Gestiona tu perfil y cursos.</p>
+    </div>
+
+    <div class="menu-container">
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-primary" (click)="selectedOption = 'perfil'">Perfil</button>
+        <button type="button" class="btn btn-primary" (click)="selectedOption = 'cursos-inscritos'">Cursos Inscritos</button>
+        <button type="button" class="btn btn-primary" (click)="selectedOption = 'inscribirse-curso'">Inscribirse a un Curso</button>
+      </div>
+    </div>
+
+    <div class="section-container" *ngIf="selectedOption === 'perfil'">
+      <h2>Perfil</h2>
+      <div><strong>ID:</strong> {{ cliente.id_usuario }}</div>
+      <div><strong>Nombre:</strong> {{ cliente.nombre }}</div>
+      <div><strong>Email:</strong> {{ cliente.e_mail }}</div>
+      <div><strong>Teléfono:</strong> {{ cliente.tel_cel }}</div>
+      <!-- Agrega más campos según sea necesario -->
+    </div>
+
+    <div class="section-container" *ngIf="selectedOption === 'cursos-inscritos'">
+      <h2>Cursos Inscritos</h2>
+      <ul class="list-group">
+        <li *ngFor="let curso of cursosInscritos" class="list-group-item">
+          <div><strong>ID:</strong> {{ curso.id_curso }}</div>
+          <div><strong>Nombre:</strong> {{ curso.nombre }}</div>
+          <div><strong>Descripción:</strong> {{ curso.descripcion }}</div>
+          <div><strong>Horario:</strong> {{ curso.horario | date:'short' }}</div>
+          <div><strong>Disponibilidad:</strong> {{ curso.disponibilidad }}</div>
+          <button (click)="salirDelCurso(curso.id_curso)">Salirme del curso</button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="section-container" *ngIf="selectedOption === 'inscribirse-curso'">
+      <h2>Inscribirse a un Curso</h2>
+      <ul class="list-group">
+        <li *ngFor="let curso of cursosDisponibles" class="list-group-item">
+          <div><strong>ID:</strong> {{ curso.id_curso }}</div>
+          <div><strong>Nombre:</strong> {{ curso.nombre }}</div>
+          <div><strong>Descripción:</strong> {{ curso.descripcion }}</div>
+          <div><strong>Horario:</strong> {{ curso.horario | date:'short' }}</div>
+          <div><strong>Disponibilidad:</strong> {{ curso.disponibilidad }}</div>
+          <button (click)="inscribirseCurso(curso.id_curso)">Inscribirse</button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="logout-container">
+      <button class="logout-button" (click)="logout()">Logout</button>
+    </div>
+  </div>
+</div>

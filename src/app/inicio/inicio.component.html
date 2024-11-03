@@ -1,0 +1,62 @@
+<div class="separator">
+  <div class="container">
+    <div class="header">
+      <h1>Bienvenido a Nuestro Gimnasio</h1>
+      <p>Explora nuestros gimnasios, cursos y empleados.</p>
+    </div>
+
+    <div class="menu-container">
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-primary" (click)="selectedOption = 'gimnasios'">Gimnasios</button>
+        <button type="button" class="btn btn-primary" (click)="selectedOption = 'cursos'">Cursos</button>
+        <button type="button" class="btn btn-primary" (click)="selectedOption = 'empleados'">Empleados</button>
+      </div>
+    </div>
+
+    <div class="section-container" *ngIf="selectedOption === 'gimnasios'">
+      <h2>Gimnasios</h2>
+      <ul class="list-group">
+        <li *ngFor="let gimnasio of gimnasios" class="list-group-item">
+          <div><strong>ID:</strong> {{ gimnasio.id_gimnasio }}</div>
+          <div><strong>Nombre:</strong> {{ gimnasio.nombre }}</div>
+          <div><strong>Dirección:</strong> {{ gimnasio.direccion }}</div>
+          <div><strong>Horario:</strong> {{ gimnasio.horario }}</div>
+          <div><strong>Teléfono:</strong> {{ gimnasio.telefono }}</div>
+          <div><strong>Correo:</strong> {{ gimnasio.correo }}</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="section-container" *ngIf="selectedOption === 'cursos'">
+      <h2>Cursos</h2>
+      <ul class="list-group">
+        <li *ngFor="let curso of cursos" class="list-group-item">
+          <div><strong>ID:</strong> {{ curso.id_curso }}</div>
+          <div><strong>Nombre:</strong> {{ curso.nombre }}</div>
+          <div><strong>Descripción:</strong> {{ curso.descripcion }}</div>
+          <div><strong>Horario:</strong> {{ curso.horario | date:'short' }}</div>
+          <div><strong>Disponibilidad:</strong> {{ curso.disponibilidad }}</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="section-container" *ngIf="selectedOption === 'empleados'">
+      <h2>Empleados</h2>
+      <ul class="list-group">
+        <li *ngFor="let empleado of empleados" class="list-group-item">
+          <div><strong>ID:</strong> {{ empleado.id_usuario }}</div>
+          <div><strong>Nombre:</strong> {{ empleado.nombre }}</div>
+          <div><strong>Cédula:</strong> {{ empleado.cedula }}</div>
+          <div><strong>Apellidos:</strong> {{ empleado.apellido1 }} {{ empleado.apellido2 }}</div>
+          <div><strong>Dirección:</strong> {{ empleado.direccion }}</div>
+          <div><strong>Email:</strong> {{ empleado.e_mail }}</div>
+          <div><strong>Teléfono Celular:</strong> {{ empleado.tel_cel }}</div>
+          <div><strong>Teléfono Habitación:</strong> {{ empleado.tel_habitacion }}</div>
+          <div><strong>Fecha de Contratación:</strong> {{ empleado.fecha_contratacion | date:'short' }}</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+

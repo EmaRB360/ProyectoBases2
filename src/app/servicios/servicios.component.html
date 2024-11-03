@@ -1,0 +1,90 @@
+<div class="separator">
+  <div class="container mt-4">
+    <div class="container mt-4 text-center">
+      <div class="header">
+        <h1>Servicios del Gimnasio</h1>
+        <p>Explora nuestros servicios y únete a nuestra comunidad.</p>
+      </div>
+
+      <!-- Menu -->
+      <div class="btn-group mb-4" role="group">
+        <button type="button" class="btn btn-outline-primary" (click)="selectedOption = 'maquinas'">
+          <i class="fas fa-cogs"></i> Máquinas
+        </button>
+        <button type="button" class="btn btn-outline-primary" (click)="selectedOption = 'cursos'">
+          <i class="fas fa-book"></i> Cursos Disponibles
+        </button>
+        <button type="button" class="btn btn-outline-primary" (click)="selectedOption = 'inscripcion'">
+          <i class="fas fa-user-plus"></i> Inscripción
+        </button>
+      </div>
+    </div>
+
+    <!-- Máquinas Section -->
+    <section *ngIf="selectedOption === 'maquinas'" class="section-container">
+      <div class="card">
+        <div class="card-header">
+          <h2>Máquinas</h2>
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+            <li *ngFor="let maquina of maquinas" class="list-group-item">
+              <strong>{{ maquina.nombre }}</strong> {{ maquina.descripcion }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cursos Section -->
+    <section *ngIf="selectedOption === 'cursos'" class="section-container">
+      <div class="card">
+        <div class="card-header">
+          <h2>Cursos Disponibles</h2>
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+            <li *ngFor="let curso of cursos" class="list-group-item">
+              <div><strong>ID:</strong> {{ curso.id_curso }}</div>
+              <div><strong>Nombre:</strong> {{ curso.nombre }}</div>
+              <div><strong>Descripción:</strong> {{ curso.descripcion }}</div>
+              <div><strong>Horario:</strong> {{ curso.horario | date:'short' }}</div>
+              <div><strong>Disponibilidad:</strong> {{ curso.disponibilidad }}</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Inscripción Section -->
+    <section *ngIf="selectedOption === 'inscripcion'" class="section-container">
+      <div class="card">
+        <div class="card-header">
+          <h2>Inscripción</h2>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="inscribirUsuario(f.value)" #f="ngForm">
+            <div class="form-group">
+              <label for="nombre">Nombre:</label>
+              <input type="text" id="nombre" name="nombre" ngModel class="form-control" required>
+            </div>
+            <hr>
+            <div class="form-group">
+              <label for="curso">Seleccionar Curso:</label>
+              <select id="curso" name="curso" ngModel class="form-control" required>
+                <option *ngFor="let curso of cursos" [value]="curso.id_curso">{{ curso.nombre }}</option>
+              </select>
+            </div>
+            <hr>
+            <div class="form-group">
+              <label for="horario">Horario:</label>
+              <input type="datetime-local" id="horario" name="horario" ngModel class="form-control" required>
+            </div>
+            <hr>
+            <button type="submit" class="btn btn-primary mt-3">Inscribirse</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

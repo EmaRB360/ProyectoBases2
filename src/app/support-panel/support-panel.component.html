@@ -1,0 +1,63 @@
+<div class="separator">
+  <div class="container">
+    <div class="header">
+      <h1>Panel de Soporte (DBA)</h1>
+      <p>Gestión completa de clientes e instructores, respaldo de datos y acceso a la bitácora de auditoría.</p>
+    </div>
+
+    <div class="menu-container">
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-primary" (click)="selectedOption = 'gestion-clientes'">Gestión de Clientes</button>
+        <button type="button" class="btn btn-primary" (click)="selectedOption = 'gestion-instructores'">Gestión de Instructores</button>
+        <button type="button" class="btn btn-primary" (click)="selectedOption = 'respaldo-datos'">Respaldo de Datos</button>
+        <button type="button" class="btn btn-primary" (click)="selectedOption = 'bitacora-auditoria'">Bitácora de Auditoría</button>
+      </div>
+    </div>
+
+    <div class="section-container" *ngIf="selectedOption === 'gestion-clientes'">
+      <h2>Gestión de Clientes</h2>
+      <ul class="list-group">
+        <li *ngFor="let cliente of clientes" class="list-group-item">
+          <div><strong>ID:</strong> {{ cliente.id_usuario }}</div>
+          <div><strong>Nombre:</strong> {{ cliente.nombre }}</div>
+          <button (click)="editarCliente(cliente.id_usuario)">Editar</button>
+          <button (click)="eliminarCliente(cliente.id_usuario)">Eliminar</button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="section-container" *ngIf="selectedOption === 'gestion-instructores'">
+      <h2>Gestión de Instructores</h2>
+      <ul class="list-group">
+        <li *ngFor="let instructor of empleados" class="list-group-item">
+          <div><strong>ID:</strong> {{ instructor.id_usuario }}</div>
+          <div><strong>Nombre:</strong> {{ instructor.nombre }}</div>
+          <button (click)="editarInstructor(instructor.id_usuario)">Editar</button>
+          <button (click)="eliminarInstructor(instructor.id_usuario)">Eliminar</button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="section-container" *ngIf="selectedOption === 'respaldo-datos'">
+      <h2>Respaldo de Datos</h2>
+      <button (click)="respaldarDatos()">Realizar Respaldo</button>
+    </div>
+
+    <div class="section-container" *ngIf="selectedOption === 'bitacora-auditoria'">
+      <h2>Bitácora de Auditoría</h2>
+      <ul class="list-group">
+        <li *ngFor="let registro of bitacoras" class="list-group-item">
+          <div><strong>ID:</strong> {{ registro.id_bitacora }}</div>
+          <div><strong>Tabla Afectada:</strong> {{ registro.tabla_afectada }}</div>
+          <div><strong>Tipo de Acción:</strong> {{ registro.tipo_accion }}</div>
+          <div><strong>Descripción:</strong> {{ registro.descripcion }}</div>
+          <div><strong>Fecha:</strong> {{ registro.fecha_hora | date:'short' }}</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="logout-container">
+      <button class="logout-button" (click)="logout()">Logout</button>
+    </div>
+  </div>
+</div>

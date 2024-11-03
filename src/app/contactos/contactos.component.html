@@ -1,0 +1,13 @@
+<div class="contact-container">
+  <h2>Contactos</h2>
+  <h3>Gimnasios</h3>
+  <ul class="gimnasios-list">
+    <li *ngFor="let gimnasio of gimnasios" class="gimnasio-item d-flex flex-column flex-md-row">
+      <p><strong>Nombre:</strong> {{ gimnasio.nombre }}</p>
+      <p><strong>Teléfono:</strong> {{ gimnasio.telefono }}</p>
+      <p><strong>Correo:</strong> {{ gimnasio.correo }}</p>
+      <p><strong>Dirección:</strong> {{ gimnasio.direccion }}</p>
+      <hr />
+    </li>
+  </ul>
+</div>
